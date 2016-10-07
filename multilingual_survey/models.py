@@ -112,7 +112,7 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
 
     """
     translations = TranslatedFields(
-        title=models.CharField(verbose_name=_('Title'), max_length=256),
+        title=models.CharField(verbose_name=_('Title'), max_length=255),
     )
 
     slug = models.SlugField(
