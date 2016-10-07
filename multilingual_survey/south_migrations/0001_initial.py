@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         # Adding model 'SurveyTranslation'
         db.create_table(u'multilingual_survey_survey_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
             ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['multilingual_survey.Survey'])),
         ))
@@ -24,14 +24,14 @@ class Migration(SchemaMigration):
         # Adding model 'Survey'
         db.create_table(u'multilingual_survey_survey', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=256)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=255)),
         ))
         db.send_create_signal(u'multilingual_survey', ['Survey'])
 
         # Adding model 'SurveyQuestionTranslation'
         db.create_table(u'multilingual_survey_surveyquestion_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
             ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['multilingual_survey.SurveyQuestion'])),
@@ -44,7 +44,7 @@ class Migration(SchemaMigration):
         # Adding model 'SurveyQuestion'
         db.create_table(u'multilingual_survey_surveyquestion', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=256)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
             ('survey', self.gf('django.db.models.fields.related.ForeignKey')(related_name='questions', to=orm['multilingual_survey.Survey'])),
             ('is_multi_select', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('has_other_field', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -59,7 +59,7 @@ class Migration(SchemaMigration):
         # Adding model 'SurveyAnswerTranslation'
         db.create_table(u'multilingual_survey_surveyanswer_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
             ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['multilingual_survey.SurveyAnswer'])),
         ))
@@ -71,7 +71,7 @@ class Migration(SchemaMigration):
         # Adding model 'SurveyAnswer'
         db.create_table(u'multilingual_survey_surveyanswer', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=256)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
             ('question', self.gf('django.db.models.fields.related.ForeignKey')(related_name='answers', to=orm['multilingual_survey.SurveyQuestion'])),
             ('position', self.gf('django.db.models.fields.PositiveIntegerField')()),
         ))
@@ -181,21 +181,21 @@ class Migration(SchemaMigration):
         u'multilingual_survey.survey': {
             'Meta': {'object_name': 'Survey'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '256'})
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'})
         },
         u'multilingual_survey.surveyanswer': {
             'Meta': {'ordering': "('position',)", 'unique_together': "(('slug', 'question'),)", 'object_name': 'SurveyAnswer'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'question': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'answers'", 'to': u"orm['multilingual_survey.SurveyQuestion']"}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '256'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
         },
         u'multilingual_survey.surveyanswertranslation': {
             'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'SurveyAnswerTranslation', 'db_table': "u'multilingual_survey_surveyanswer_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['multilingual_survey.SurveyAnswer']"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'multilingual_survey.surveyquestion': {
             'Meta': {'ordering': "('position',)", 'unique_together': "(('slug', 'survey'),)", 'object_name': 'SurveyQuestion'},
@@ -204,7 +204,7 @@ class Migration(SchemaMigration):
             'is_multi_select': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '256'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'survey': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'questions'", 'to': u"orm['multilingual_survey.Survey']"})
         },
         u'multilingual_survey.surveyquestiontranslation': {
@@ -213,7 +213,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['multilingual_survey.SurveyQuestion']"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'multilingual_survey.surveyresponse': {
             'Meta': {'ordering': "('question__position',)", 'object_name': 'SurveyResponse'},
@@ -229,7 +229,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['multilingual_survey.Survey']"}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }
 
