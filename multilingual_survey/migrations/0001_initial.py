@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             name='Survey',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.SlugField(max_length=256, unique=True, verbose_name='Slug')),
+                ('slug', models.SlugField(max_length=255, unique=True, verbose_name='Slug')),
             ],
             options={
                 'abstract': False,
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             name='SurveyAnswer',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.SlugField(max_length=256, verbose_name='Slug')),
+                ('slug', models.SlugField(max_length=255, verbose_name='Slug')),
             ],
             bases=(django_libs.models_mixins.TranslationModelMixin, models.Model),
         ),
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             name='SurveyAnswerTranslation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=256, verbose_name='Title')),
+                ('title', models.CharField(max_length=255, verbose_name='Title')),
                 ('language_code', models.CharField(db_index=True, max_length=15)),
                 ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='multilingual_survey.SurveyAnswer')),
             ],
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
             name='SurveyQuestion',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.SlugField(max_length=256, verbose_name=b'Slug')),
+                ('slug', models.SlugField(max_length=255, verbose_name=b'Slug')),
                 ('is_multi_select', models.BooleanField(default=False, verbose_name='Is multi-select')),
                 ('has_other_field', models.BooleanField(default=False, verbose_name='Has other-field')),
                 ('required', models.BooleanField(default=False, verbose_name='Required')),
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
             name='SurveyQuestionTranslation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=256, verbose_name='Title')),
+                ('title', models.CharField(max_length=255, verbose_name='Title')),
                 ('content', models.TextField(blank=True, verbose_name='Content')),
                 ('language_code', models.CharField(db_index=True, max_length=15)),
                 ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='multilingual_survey.SurveyQuestion')),
@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
             name='SurveyTranslation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=256, verbose_name='Title')),
+                ('title', models.CharField(max_length=255, verbose_name='Title')),
                 ('description', models.TextField(blank=True, max_length=2048, verbose_name='Description')),
                 ('language_code', models.CharField(db_index=True, max_length=15)),
                 ('master', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='multilingual_survey.Survey')),
