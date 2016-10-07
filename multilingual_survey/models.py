@@ -1,4 +1,5 @@
 """Models for the multilingual_survey app"""
+from autoslug import AutoSlugField
 from django.contrib.contenttypes import generic
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -30,8 +31,9 @@ class Survey(TranslationModelMixin, TranslatableModel):
         )
     )
 
-    slug = models.SlugField(
+    slug = AutoSlugField(
         verbose_name=_('Slug'),
+        populate_from='title',
         max_length=255,
         unique=True,
     )
@@ -67,8 +69,9 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
         )
     )
 
-    slug = models.SlugField(
-        verbose_name=('Slug'),
+    slug = AutoSlugField(
+        verbose_name=_('Slug'),
+        populate_from='title',
         max_length=255,
     )
 
@@ -115,8 +118,9 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
         title=models.CharField(verbose_name=_('Title'), max_length=255),
     )
 
-    slug = models.SlugField(
+    slug = AutoSlugField(
         verbose_name=_('Slug'),
+        populate_from='title',
         max_length=255,
     )
 
