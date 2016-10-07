@@ -1,5 +1,5 @@
 """Models for the multilingual_survey app"""
-from django.contrib.contenttypes import fields
+from django.contrib.contenttypes import generic
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -93,7 +93,7 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
         default=False,
     )
 
-    generic_position = fields.GenericRelation(
+    generic_position = generic.GenericRelation(
         'generic_positions.ObjectPosition'
     )
 
@@ -126,7 +126,7 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
         related_name='answers'
     )
 
-    generic_position = fields.GenericRelation(
+    generic_position = generic.GenericRelation(
         'generic_positions.ObjectPosition'
     )
 
