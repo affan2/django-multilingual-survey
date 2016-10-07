@@ -21,7 +21,7 @@ class Survey(TranslationModelMixin, TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(
             verbose_name=_('Title'),
-            max_length=256,
+            max_length=255,
         ),
         description=models.TextField(
             verbose_name=_('Description'),
@@ -32,7 +32,7 @@ class Survey(TranslationModelMixin, TranslatableModel):
 
     slug = models.SlugField(
         verbose_name=_('Slug'),
-        max_length=256,
+        max_length=255,
         unique=True,
     )
 
@@ -59,7 +59,7 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(
             verbose_name=_('Title'),
-            max_length=256,
+            max_length=255,
         ),
         content=models.TextField(
             verbose_name=_('Content'),
@@ -69,7 +69,7 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
 
     slug = models.SlugField(
         verbose_name=('Slug'),
-        max_length=256,
+        max_length=255,
     )
 
     survey = models.ForeignKey(
@@ -117,7 +117,7 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
 
     slug = models.SlugField(
         verbose_name=_('Slug'),
-        max_length=256,
+        max_length=255,
     )
 
     question = models.ForeignKey(
