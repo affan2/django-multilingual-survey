@@ -4,12 +4,39 @@ from django.contrib.contenttypes import generic
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-
+from django.contrib.auth.models import User
 from django_libs.models_mixins import TranslationModelMixin
 from hvad.models import TranslatableModel, TranslatedFields
 
 
-class Survey(TranslationModelMixin, TranslatableModel):
+class BaseModel(models.Model):
+    created = models.DateTimeField(
+        verbose_name=_('Creation date'),
+        auto_now_add=True,
+        editable=False,
+    )
+    created_by = models.ForeignKey(
+        User,
+        related_name="%(app_label)s_%(class)s_created_by",
+    )
+
+    updated = models.DateTimeField(
+        verbose_name=_('Update date'),
+        auto_now=True,
+        editable=False,
+    )
+    updated_by = models.ForeignKey(
+        User,
+        related_name="%(app_label)s_%(class)s_updated_by",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Survey(TranslationModelMixin, TranslatableModel, BaseModel):
     """
     A Survey consists of several Questions.
 
@@ -34,12 +61,12 @@ class Survey(TranslationModelMixin, TranslatableModel):
     slug = AutoSlugField(
         verbose_name=_('Slug'),
         populate_from='title',
-        max_length=255,
+        max_length=200,
         unique=True,
     )
 
 
-class SurveyQuestion(TranslationModelMixin, TranslatableModel):
+class SurveyQuestion(TranslationModelMixin, TranslatableModel, BaseModel):
     """
     Belongs to a Survey and has several SurveyAnswers.
 
@@ -61,7 +88,7 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(
             verbose_name=_('Title'),
-            max_length=255,
+            max_length=500,
         ),
         content=models.TextField(
             verbose_name=_('Content'),
@@ -72,13 +99,19 @@ class SurveyQuestion(TranslationModelMixin, TranslatableModel):
     slug = AutoSlugField(
         verbose_name=_('Slug'),
         populate_from='title',
-        max_length=255,
+        max_length=200,
     )
 
     survey = models.ForeignKey(
         Survey,
         verbose_name=_('Survey'),
         related_name='questions',
+    )
+
+    is_choice_field = models.BooleanField(
+        verbose_name=_('Is choice field'),
+        default=False,
+        help_text='Default field type is text area'
     )
 
     is_multi_select = models.BooleanField(
@@ -115,13 +148,15 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
 
     """
     translations = TranslatedFields(
-        title=models.CharField(verbose_name=_('Title'), max_length=255),
+        title=models.TextField(
+            verbose_name=_('Title')
+        ),
     )
 
     slug = AutoSlugField(
         verbose_name=_('Slug'),
         populate_from='title',
-        max_length=255,
+        max_length=200,
     )
 
     question = models.ForeignKey(
@@ -134,8 +169,42 @@ class SurveyAnswer(TranslationModelMixin, TranslatableModel):
         'generic_positions.ObjectPosition'
     )
 
+    created = models.DateTimeField(
+        verbose_name=_('Creation date'),
+        auto_now_add=True,
+        editable=False,
+    )
+    updated = models.DateTimeField(
+        verbose_name=_('Update date'),
+        auto_now=True,
+        editable=False,
+    )
+
     class Meta:
         unique_together = ('slug', 'question')
+
+
+@python_2_unicode_compatible
+class SurveyResponseUserDetails(models.Model):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=255,
+    )
+    email = models.EmailField(
+        verbose_name=_('Email'),
+        max_length=255,
+    )
+    job_title = models.CharField(
+        verbose_name=_('Job Title'),
+        max_length=255,
+    )
+    company = models.CharField(
+        verbose_name=_('Company'),
+        max_length=255,
+    )
+
+    def __str__(self):
+        return self.responses.all()[0]
 
 
 @python_2_unicode_compatible
@@ -159,6 +228,13 @@ class SurveyResponse(models.Model):
     user = models.ForeignKey(
         'auth.User',
         verbose_name=_('User'),
+        related_name='responses',
+        blank=True, null=True,
+    )
+
+    user_details = models.ForeignKey(
+        SurveyResponseUserDetails,
+        verbose_name=_('User Details'),
         related_name='responses',
         blank=True, null=True,
     )
@@ -188,9 +264,16 @@ class SurveyResponse(models.Model):
         blank=True,
     )
 
-    date_created = models.DateTimeField(
-        verbose_name=_('Date created'),
+    created = models.DateTimeField(
+        verbose_name=_('Creation date'),
         auto_now_add=True,
+        editable=False,
+    )
+
+    updated = models.DateTimeField(
+        verbose_name=_('Update date'),
+        auto_now=True,
+        editable=False,
     )
 
     def __str__(self):
