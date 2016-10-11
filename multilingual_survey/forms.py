@@ -244,7 +244,10 @@ class SurveyForm(forms.Form):
                         for answer in response:
                             resp_obj.answer.add(answer)
                     else:
-                        SurveyAnswer.objects.get(question=question).delete()
+                        try:
+                            SurveyAnswer.objects.get(question=question).delete()
+                        except:
+                            pass
                         answer = SurveyAnswer.objects.create(title=response, question=question)
                         resp_obj.answer.add(answer)
 
