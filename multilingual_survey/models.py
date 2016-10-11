@@ -256,11 +256,11 @@ class SurveyResponse(models.Model):
         SurveyAnswer,
         verbose_name=_('Answer'),
         related_name='responses',
+        blank=True, null=True,
     )
 
-    other_answer = models.CharField(
+    other_answer = models.TextField(
         verbose_name=_('Other answer'),
-        max_length=1024,
         blank=True,
     )
 

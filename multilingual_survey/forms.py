@@ -175,7 +175,7 @@ class SurveyForm(forms.Form):
                     initial[question.slug] = response.other_answer
 
             else:
-                initial[question.slug] = response.answer.all()[0].title
+                initial[question.slug] = response.other_answer
         return initial
 
     def clean(self):
@@ -240,18 +240,7 @@ class SurveyForm(forms.Form):
                 if isinstance(response, SurveyAnswer):
                     resp_obj.answer.add(response)
                 else:
-                    if not isinstance(response, types.StringTypes):
-                        for answer in response:
-                            resp_obj.answer.add(answer)
-                    else:
-                        try:
-                            survey_answer = SurveyAnswer.objects.get(question=question)
-                            if survey_answer:
-                                survey_answer.delete()
-                        except:
-                            pass
-                        answer = SurveyAnswer.objects.create(title=response, question=question)
-                        resp_obj.answer.add(answer)
+                    resp_obj.other_answer = response
 
             resp_obj.save()
         return self.survey
